@@ -29,7 +29,9 @@ export function Create() {
 
   // Download list of games
   useEffect(() => {
-    fetch("http://localhost/api/saberworks/games")
+    fetch("http://localhost/api/saberworks/games", {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         const unsortedGames = data.map((game) => {
@@ -44,35 +46,48 @@ export function Create() {
 
   // Download list of tags
   useEffect(() => {
-    fetch("http://localhost/api/saberworks/tags")
+    fetch("http://localhost/api/saberworks/tags", {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => setTagOptions(data));
   }, []);
 
-  const onFinish = (values) => {
-    console.log("FORM SUBMITTED");
-
-    const selectedColor = color;
+  const onFinish = async (values) => {
+    const selectedColor = color ? color.substring(1) : "FFFFFF";
     const selectedTags = gatherSelectedTags(tags);
 
-    console.log(`SELECTED COLOR: ${selectedColor}`);
-    console.log(`selected tags: ${selectedTags}`);
+    const requestBody = {
+      accent_color: selectedColor,
+      tags: selectedTags,
+      games: values.games,
+      name: values.name,
+      description: values.description,
+    };
 
-    console.dir(values);
+    // django requires csrftoken to be in the request headers; yank it out
+    // of the cookie and put it in the headers
+    const csrftoken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("csrftoken="))
+      .split("=")[1];
 
-    // TODO: submit json like this:
-    //
-    // this is the json that must be sent
-    // {
-    //   "games": [],
-    //   "tags": [],
-    //   "name": "string",
-    //   "description": "string",
-    //   "accent_color": "string"
-    // }
+    const response = await fetch("http://localhost/api/saberworks/projects", {
+      method: "POST",
+      cache: "no-cache",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      body: JSON.stringify(requestBody),
+    });
 
-    // const project_id = 1234;
-    // navigate(`/projects/${project_id}`);
+    const data = await response.json();
+
+    const projectId = data.project.id;
+
+    navigate(`/projects/${projectId}`, { state: { justCreated: true } });
   };
 
   const handleColorChange = (color) => {
@@ -117,7 +132,7 @@ export function Create() {
           label="Name"
           rules={[{ required: true, message: "Please enter a Project Name." }]}
         >
-          <Input placeholder="Project Name"></Input>
+          <Input placeholder="Project Name" maxLength={256}></Input>
         </Form.Item>
 
         <Form.Item
@@ -126,11 +141,15 @@ export function Create() {
           rules={[
             {
               required: true,
-              message: "Please select a Description of the project.",
+              message: "Please enter a Description of the project.",
             },
           ]}
         >
-          <Input.TextArea></Input.TextArea>
+          <Input.TextArea
+            showCount
+            maxLength={8192}
+            style={{ height: "12em" }}
+          ></Input.TextArea>
         </Form.Item>
 
         <Form.Item label="Accent Color">
@@ -148,6 +167,7 @@ export function Create() {
         <Form.Item
           name="games"
           label="Game(s)"
+          tooltip="Choose all that apply.  Something missing?  Contact me!."
           rules={[
             { required: true, message: "Please select at least one game." },
           ]}
@@ -193,7 +213,6 @@ function getBreadcrumbs() {
       breadcrumbName: "Projects",
     },
     {
-      path: "/projects/create",
       breadcrumbName: "create",
     },
   ];
@@ -222,10 +241,12 @@ function byGameOrder(a, b) {
 
 function gatherSelectedTags(tags) {
   const selectedTags = [];
+
   for (const tagType in tags) {
     for (const tag in tags[tagType]) {
       selectedTags.push(tags[tagType][tag]);
     }
   }
+
   return selectedTags;
 }

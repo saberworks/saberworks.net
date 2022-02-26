@@ -29,12 +29,20 @@ export function Breadcrumbs({ crumbs }) {
 //
 // This function takes a list of crumbs like the example above.
 function getBreadcrumbs(crumbs) {
+  if (!crumbs) {
+    return <></>;
+  }
+
   return (
     <Breadcrumb style={{ paddingTop: "1em" }}>
       {crumbs.map((crumb) => {
         return (
-          <Breadcrumb.Item key={crumb.path}>
-            <Link to={crumb.path}>{crumb.breadcrumbName}</Link>
+          <Breadcrumb.Item key={crumb.path ? crumb.path : "foofoofoo"}>
+            {crumb.path ? (
+              <Link to={crumb.path}>{crumb.breadcrumbName}</Link>
+            ) : (
+              crumb.breadcrumbName
+            )}
           </Breadcrumb.Item>
         );
       })}
