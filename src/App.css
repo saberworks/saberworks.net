@@ -1,0 +1,62 @@
+/* @import '~antd/dist/antd.css'; */
+@import "~antd/dist/antd.dark.css";
+/* @import "~antd/dist/antd.compact.css"; */
+
+body {
+  width: 160ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ant-layout-header,
+.ant-layout-footer {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.ant-layout-content {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.ant-page-header {
+  padding-left: 0;
+  padding-right: 0;
+}
+/* .ant-btn-primary {
+    background-color: rgb(31, 78, 49);
+    color: silver;
+    border: 1px solid green;
+} */
+
+.color-picker-wrapper {
+  border: 1px solid #434343; /* match antd */
+  padding: 1em;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.tags-wrapper {
+  border: 1px solid #434343; /* match antd */
+  padding: 1em;
+  border-radius: 2px;
+  margin-bottom: 1em;
+  /* display: inline-block; */
+}
+
+.saberworks-color-picker .react-colorful {
+  height: 240px;
+  border-radius: 0;
+}
+.saberworks-color-picker .react-colorful__saturation {
+  border-radius: 1px 1px 1 1;
+}
+.saberworks-color-picker .react-colorful__hue {
+  height: 40px;
+  border-radius: 0 0 0px 0px;
+}
+.saberworks-color-picker .react-colorful__hue-pointer {
+  /* width: 10px; */
+  /* height: inherit; */
+  /* border-radius: 2; */
+}
