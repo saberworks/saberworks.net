@@ -4,10 +4,10 @@ import { Layout, Typography } from "antd";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 const { Header, Footer, Content } = Layout;
 
-import { Home } from "./pages/Home";
-import { Create as ProjectCreate } from "./pages/projects/Create";
-import { Edit as ProjectEdit } from "./pages/projects/Edit";
-import { View as ProjectView } from "./pages/projects/View";
+import { Home } from "@/pages/Home";
+import { Create as ProjectCreate } from "@/pages/projects/Create";
+import { Edit as ProjectEdit } from "@/pages/projects/Edit";
+import { View as ProjectView } from "@/pages/projects/View";
 
 function App() {
   return (

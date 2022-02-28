@@ -15,11 +15,7 @@ export function Edit() {
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
-      <PageHeader
-        className="site-page-header"
-        title="projects"
-        subTitle="edit"
-      />
+      <PageHeader className="site-page-header" title="Edit Project" />
       <Text>Edit project! {projectId}</Text>
     </>
   );
@@ -42,7 +38,6 @@ function getBreadcrumbs(projectId) {
       breadcrumbName: `Project ${idStr}`,
     },
     {
-      path: `/projects/${idStr}/edit`,
       breadcrumbName: "edit",
     },
   ];

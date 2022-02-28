@@ -1,11 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { message, Typography, PageHeader } from "antd";
-import { useParams } from "react-router-dom";
-import { Breadcrumbs } from "../../components/Breadcrumbs";
+import { useLocation, useParams } from "react-router-dom";
+import { message, PageHeader, Spin, Tabs } from "antd";
 
-const { Text } = Typography;
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { Project } from "@/components/Project";
+
+const { TabPane } = Tabs;
 
 export function View() {
   const params = useParams();
@@ -30,27 +31,32 @@ export function View() {
 
   useEffect(() => {
     if (state && state["justCreated"]) {
-      message.success("Project created!  You may want to add a project image.");
+      message.success(
+        "Project created!  You may want to set a project image.",
+        10
+      );
     }
   }, [state]);
 
-  console.log("PROJECT::::::::::::::::::::");
-  console.dir(project);
-
-  // TODO: make a decent looking page for the project
-  // * use accent_color somewhere
-  // * link or form to submit a project image
+  if (!project) {
+    return <Spin />;
+  }
 
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
-      <PageHeader
-        className="site-page-header"
-        title="projects"
-        subTitle="edit"
-      />
-      <Text>View project! {projectId}</Text>
-      <Text>{project.name}</Text>
+      <PageHeader className="site-page-header" title={project.name} />
+      <Tabs defaultActiveKey="1">
+        <TabPane tab="Details" key="1">
+          <Project project={project} />
+        </TabPane>
+        <TabPane tab="Posts" key="2">
+          TODO: Implement list of posts
+        </TabPane>
+        <TabPane tab="Files" key="3">
+          TODO: Implement list of files
+        </TabPane>
+      </Tabs>
     </>
   );
 }

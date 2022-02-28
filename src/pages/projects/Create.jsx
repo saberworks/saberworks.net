@@ -4,28 +4,24 @@ import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input, PageHeader } from "antd";
 import { HexColorPicker } from "react-colorful";
 
-import { Breadcrumbs } from "../../components/Breadcrumbs";
-import { TagSetCheckBoxGroup } from "../../components/TagSetCheckBoxGroup";
-
-const wantedGameOrder = [
-  "Dark Forces",
-  "Jedi Knight",
-  "Mysteries of the Sith",
-  "Jedi Outcast",
-  "Jedi Academy",
-];
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { TagSetCheckBoxGroup } from "@/components/TagSetCheckBoxGroup";
 
 export function Create() {
   const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const crumbs = getBreadcrumbs();
 
   const [color, setColor] = useState("#F0F0F0");
+
+  // stores available games from which the user can select
   const [gameOptions, setGameOptions] = useState([]);
-  const [tagOptions, setTagOptions] = useState([]); // stored tag options (what can be selected by user)
-  const [tags, setTags] = useState({}); // stores selected tags
 
-  const [form] = Form.useForm();
+  // stores available tags from which the user can select
+  const [tagOptions, setTagOptions] = useState([]);
 
-  const crumbs = getBreadcrumbs();
+  // stores a list of tags actually selected by the user
+  const [tags, setTags] = useState({});
 
   // Download list of games
   useEffect(() => {
@@ -117,8 +113,7 @@ export function Create() {
       <Breadcrumbs crumbs={crumbs} />
       <PageHeader
         className="site-page-header"
-        title="projects"
-        subTitle="create"
+        title="Create Project"
       />
       <Form
         layout="horizontal"
@@ -217,6 +212,14 @@ function getBreadcrumbs() {
     },
   ];
 }
+
+const wantedGameOrder = [
+  "Dark Forces",
+  "Jedi Knight",
+  "Mysteries of the Sith",
+  "Jedi Outcast",
+  "Jedi Academy",
+];
 
 // Sort JK series in order of release first, then any other games in
 // alphabetical order.
