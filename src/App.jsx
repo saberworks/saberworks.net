@@ -8,6 +8,7 @@ import { Home } from "@/pages/Home";
 import { Create as ProjectCreate } from "@/pages/projects/Create";
 import { Edit as ProjectEdit } from "@/pages/projects/Edit";
 import { View as ProjectView } from "@/pages/projects/View";
+import { Image as ProjectImage } from "@/pages/projects/Image";
 
 function App() {
   return (
@@ -23,6 +24,11 @@ function App() {
             <Route path="/projects/create" element={<ProjectCreate />} />
             <Route path="/projects/:projectId" element={<ProjectView />} />
             <Route path="/projects/:projectId/edit" element={<ProjectEdit />} />
+            <Route
+              path="/projects/:projectId/image"
+              element={<ProjectImage />}
+            />
+
             <Route
               path="*"
               element={

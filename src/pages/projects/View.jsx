@@ -38,7 +38,7 @@ export function View() {
     }
   }, [state]);
 
-  if (!project) {
+  if (Object.keys(project).length === 0) {
     return <Spin />;
   }
 

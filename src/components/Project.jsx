@@ -29,45 +29,39 @@ export function Project({ project }) {
   );
 
   return (
-    <>
-      <Descriptions
-        title="Project Details"
-        bordered
-        labelStyle={{ fontWeight: "" }}
-        column={1}
-        contentStyle={{ whiteSpace: "pre-line", fontWeight: "bold" }}
-        extra={[editLink]}
+    <Descriptions
+      title="Project Details"
+      bordered
+      labelStyle={{ fontWeight: "" }}
+      column={1}
+      contentStyle={{ whiteSpace: "pre-line", fontWeight: "bold" }}
+      extra={editLink}
+    >
+      <Descriptions.Item label="Name">{project.name}</Descriptions.Item>
+      <Descriptions.Item
+        label="Accent Color"
+        contentStyle={{ color: "#" + project.accent_color }}
       >
-        <Descriptions.Item label="Name">{project.name}</Descriptions.Item>
-        <Descriptions.Item
-          label="Accent Color"
-          contentStyle={{ color: "#" + project.accent_color }}
-        >
-          #{project.accent_color}
-        </Descriptions.Item>
-        <Descriptions.Item label="Games">
-          <Games games={project.games} />
-        </Descriptions.Item>
-        <Descriptions.Item label="Tags">
-          <Tags tags={project.tags} />
-        </Descriptions.Item>
-        <Descriptions.Item
-          label="Image"
-          contentStyle={{ fontWeight: "normal", whiteSpace: "pre-line" }}
-        >
-          {projectImage}
-          <br />
-
-          {imageLink}
-        </Descriptions.Item>
-        <Descriptions.Item
-          label="Description"
-          contentStyle={{ fontWeight: "normal" }}
-        >
-          {project.description}
-        </Descriptions.Item>
-      </Descriptions>
-    </>
+        #{project.accent_color}
+      </Descriptions.Item>
+      <Descriptions.Item label="Games">
+        <Games games={project.games} />
+      </Descriptions.Item>
+      <Descriptions.Item label="Tags">
+        <Tags tags={project.tags} />
+      </Descriptions.Item>
+      <Descriptions.Item label="Image" contentStyle={{ fontWeight: "normal" }}>
+        {projectImage}
+        <br />
+        {imageLink}
+      </Descriptions.Item>
+      <Descriptions.Item
+        label="Description"
+        contentStyle={{ fontWeight: "normal" }}
+      >
+        {project.description}
+      </Descriptions.Item>
+    </Descriptions>
   );
 }
 

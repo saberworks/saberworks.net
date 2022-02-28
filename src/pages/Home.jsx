@@ -47,9 +47,9 @@ export function Home() {
 
   if (loading) {
     return (
-      <div>
+      <p>
         <Spin />
-      </div>
+      </p>
     );
   }
 

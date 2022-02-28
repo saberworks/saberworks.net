@@ -22,14 +22,13 @@ export function Breadcrumbs({ crumbs }) {
 //       breadcrumbName: `Project ${idStr}`,
 //     },
 //     {
-//       path: `/projects/${idStr}/edit`,
 //       breadcrumbName: "edit",
 //     },
 //   ];
 //
 // This function takes a list of crumbs like the example above.
 function getBreadcrumbs(crumbs) {
-  if (!crumbs) {
+  if (!(Array.isArray(crumbs) && crumbs.length > 0)) {
     return <></>;
   }
 

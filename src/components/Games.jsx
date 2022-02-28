@@ -17,7 +17,7 @@ const availableColors = [
 ];
 
 export function Games({ games }) {
-  if (!games) return <></>;
+  if (!(Array.isArray(games) && games.length > 0)) return <></>;
 
   const jsxList = [];
 

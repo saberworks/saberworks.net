@@ -17,7 +17,7 @@ const availableColors = [
 ];
 
 export function Tags({ tags }) {
-  if (!tags) return <></>;
+  if (!(Array.isArray(tags) && tags.length > 0)) return <></>;
 
   const groupedTags = groupTags(tags);
   const sortedKeys = Object.keys(groupedTags).sort();
