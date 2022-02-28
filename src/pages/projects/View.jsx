@@ -5,6 +5,7 @@ import { message, PageHeader, Spin, Tabs } from "antd";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Project } from "@/components/Project";
+import { saberworksApiClient as client } from "@/client/saberworks";
 
 const { TabPane } = Tabs;
 
@@ -18,11 +19,13 @@ export function View() {
   const [crumbs, setCrumbs] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost/api/saberworks/projects/${projectId}`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setProject(data));
+    const fetchData = async () => {
+      const data = await client.getProject(projectId);
+
+      setProject(data);
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {

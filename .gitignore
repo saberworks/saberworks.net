@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# you should create a config.json or link an existing config with `ln`
+src/config/config.json
+

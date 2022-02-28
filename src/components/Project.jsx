@@ -6,6 +6,7 @@ import { Descriptions, Image } from "antd";
 
 import { Games } from "@/components/Games";
 import { Tags } from "@/components/Tags";
+import { baseUrl } from "@/client/saberworks";
 
 export function Project({ project }) {
   const editPath = "/projects/" + project.id + "/edit";
@@ -21,7 +22,7 @@ export function Project({ project }) {
   const projectImage = project.image ? (
     <Image
       width={200}
-      src={`http://localhost/${project.image}`}
+      src={`${baseUrl}/${project.image}`}
       style={{ marginBottom: "1em" }}
     />
   ) : (

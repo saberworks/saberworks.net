@@ -6,6 +6,7 @@ import { HexColorPicker } from "react-colorful";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { TagSetCheckBoxGroup } from "@/components/TagSetCheckBoxGroup";
+import { saberworksApiClient as client } from "@/client/saberworks";
 
 export function Create() {
   const navigate = useNavigate();
@@ -25,28 +26,33 @@ export function Create() {
 
   // Download list of games
   useEffect(() => {
-    fetch("http://localhost/api/saberworks/games", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const unsortedGames = data.map((game) => {
-          return { label: game.name, value: game.id };
-        });
+    const fetchData = async () => {
+      const games = await client.getGames();
 
-        const games = unsortedGames.sort(byGameOrder);
-
-        setGameOptions(games);
+      // transform list of games into something the antd CheckboxGroup can use
+      const wantedGames = games.map((game) => {
+        return { label: game.name, value: game.id };
       });
+
+      // Sort so the JK series shows up first and in order, with all other games
+      // following in alphabetical order
+      wantedGames.sort(byGameOrder);
+
+      setGameOptions(wantedGames);
+    };
+
+    fetchData();
   }, []);
 
   // Download list of tags
   useEffect(() => {
-    fetch("http://localhost/api/saberworks/tags", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setTagOptions(data));
+    const fetchData = async () => {
+      const tags = await client.getTags();
+
+      setTagOptions(tags);
+    };
+
+    fetchData();
   }, []);
 
   const onFinish = async (values) => {
@@ -61,25 +67,7 @@ export function Create() {
       description: values.description,
     };
 
-    // django requires csrftoken to be in the request headers; yank it out
-    // of the cookie and put it in the headers
-    const csrftoken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("csrftoken="))
-      .split("=")[1];
-
-    const response = await fetch("http://localhost/api/saberworks/projects", {
-      method: "POST",
-      cache: "no-cache",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    const data = await response.json();
+    const data = await client.addProject(requestBody);
 
     const projectId = data.project.id;
 
@@ -111,10 +99,7 @@ export function Create() {
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
-      <PageHeader
-        className="site-page-header"
-        title="Create Project"
-      />
+      <PageHeader className="site-page-header" title="Create Project" />
       <Form
         layout="horizontal"
         form={form}

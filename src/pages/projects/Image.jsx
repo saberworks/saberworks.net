@@ -6,6 +6,7 @@ import { Image as AntImage } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
 
 export function Image() {
   const navigate = useNavigate();
@@ -17,11 +18,13 @@ export function Image() {
   const [crumbs, setCrumbs] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost/api/saberworks/projects/${projectId}`, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setProject(data));
+    const fetchData = async () => {
+      const data = await client.getProject(projectId);
+
+      setProject(data);
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -37,7 +40,7 @@ export function Image() {
   if (project.image) {
     currentImage = (
       <AntImage
-        src={`http://localhost/${project.image}`}
+        src={`${baseUrl}${project.image}`}
         width={200}
         alt="Project Image"
       />
@@ -62,7 +65,7 @@ export function Image() {
 
   const props = {
     name: "image",
-    action: `http://localhost/api/saberworks/projects/${projectId}/image`,
+    action: `${baseUrl}/api/saberworks/projects/${projectId}/image`,
     multiple: false,
     withCredentials: true,
     headers: {

@@ -21,77 +21,55 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 const { Paragraph } = Typography;
 
+import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
+
 export function Home() {
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
-  const [shouldReload, setShouldReload] = useState(true);
 
   const crumbs = getBreadcrumbs();
 
   // Download list of projects
   useEffect(() => {
-    if (!shouldReload) {
-      return;
-    }
-
     setLoading(true);
 
-    fetch("http://localhost/api/saberworks/projects", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setProjects(data))
-      .then(() => setShouldReload(false))
-      .then(() => setLoading(false));
-  }, [shouldReload]);
+    const fetchData = async () => {
+      const projects = await client.getProjects();
+
+      setProjects(projects);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   if (loading) {
     return (
-      <p>
+      <div style={{ height: "100px" }}>
         <Spin />
-      </p>
+      </div>
     );
   }
 
   const deleteProject = async (project) => {
-    // django requires csrftoken to be in the request headers; yank it out
-    // of the cookie and put it in the headers
-    // TODO: pull this into a util or switch to a non-cookie based auth
-    const csrftoken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("csrftoken="))
-      .split("=")[1];
+    const genericError =
+      "Error: Project could not be deleted.  Are all associated posts and files already deleted?";
 
-    const url = `http://localhost/api/saberworks/projects/${project.id}`;
+    const deleteData = async () => {
+      const data = await client.deleteProject(project.id);
 
-    fetch(url, {
-      method: "DELETE",
-      cache: "no-cache",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          message.success("Project was deleted successfully.", 10);
-        } else {
-          message.error(
-            "Error: Project could not be deleted.  Are all associated posts and files already deleted?",
-            10
-          );
-        }
-      })
-      .then(() => setShouldReload(true))
-      .catch((e) => {
-        console.log(e);
-        message.error(
-          "Error: Project could not be deleted.  Are all associated posts and files already deleted?",
-          10
-        );
-      });
+      if (data.success) {
+        message.success("Project was deleted successfully.", 10);
+        setProjects(projects.filter((p) => p.id !== project.id));
+      } else {
+        message.error(genericError, 10);
+      }
+    };
+
+    deleteData().catch((err) => {
+      console.log(err);
+      message.error(genericError, 10);
+    });
   };
 
   return (
@@ -130,7 +108,7 @@ export function Home() {
               bodyStyle={{
                 background:
                   "linear-gradient(to right, black, transparent), url(" +
-                  `http://localhost/${project.image}` +
+                  `${baseUrl}/${project.image}` +
                   ")",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
