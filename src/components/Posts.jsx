@@ -26,7 +26,12 @@ export function Posts({ project }) {
     if (!shouldReloadPosts) return;
 
     const fetchData = async () => {
-      const posts = await client.getPosts(projectId);
+      let posts = [];
+      try {
+        posts = await client.getPosts(projectId);
+      } catch {
+        // it's ok, probably just a 404
+      }
 
       setPosts(posts);
       setShouldReloadPosts(false);
@@ -118,13 +123,6 @@ Posts.propTypes = projectPropTypes;
 function getPostsTableColumns() {
   return [
     {
-      title: "Image",
-      dataIndex: "image",
-      render: (image) => {
-        return image ? <Image src={`${baseUrl}/${image}`} width="200px" /> : "";
-      },
-    },
-    {
       title: "Title",
       dataIndex: "title",
     },
@@ -140,6 +138,13 @@ function getPostsTableColumns() {
             {text}
           </Typography.Paragraph>
         );
+      },
+    },
+    {
+      title: "Image",
+      dataIndex: "image",
+      render: (image) => {
+        return image ? <Image src={`${baseUrl}/${image}`} width="200px" /> : "";
       },
     },
   ];

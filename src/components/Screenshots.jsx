@@ -20,7 +20,13 @@ export function Screenshots({ project }) {
     if (!shouldReloadScreenshots) return;
 
     const fetchData = async () => {
-      const screenshots = await client.getScreenshots(projectId);
+      let screenshots = [];
+
+      try {
+        screenshots = await client.getScreenshots(projectId);
+      } catch (error) {
+        // it's ok, probably just a 404
+      }
 
       setScreenshots(screenshots);
       setShouldReloadScreenshots(false);
