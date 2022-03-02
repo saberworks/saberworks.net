@@ -1,17 +1,21 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { message, PageHeader, Spin, Tabs } from "antd";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Project } from "@/components/Project";
+import { Posts } from "@/components/Posts";
+import { Screenshots } from "@/components/Screenshots";
 import { saberworksApiClient as client } from "@/client/saberworks";
 
 const { TabPane } = Tabs;
 
 export function View() {
+  const navigate = useNavigate();
   const params = useParams();
   const projectId = parseInt(params.projectId);
+  const tab = params.tab;
 
   const { state } = useLocation();
 
@@ -49,14 +53,28 @@ export function View() {
     <>
       <Breadcrumbs crumbs={crumbs} />
       <PageHeader className="site-page-header" title={project.name} />
-      <Tabs defaultActiveKey="1">
-        <TabPane tab="Details" key="1">
+      <Tabs
+        defaultActiveKey="info"
+        activeKey={tab ? tab : "info"}
+        onChange={(key) => {
+          const url =
+            key == "info"
+              ? `/projects/${projectId}`
+              : `/projects/${projectId}/${key}`;
+
+          navigate(url);
+        }}
+      >
+        <TabPane tab="Details" key="info">
           <Project project={project} />
         </TabPane>
-        <TabPane tab="Posts" key="2">
-          TODO: Implement list of posts
+        <TabPane tab="Posts" key="posts">
+          <Posts project={project} />
         </TabPane>
-        <TabPane tab="Files" key="3">
+        <TabPane tab="Screenshots" key="screenshots">
+          <Screenshots project={project} />
+        </TabPane>
+        <TabPane tab="Files" key="files">
           TODO: Implement list of files
         </TabPane>
       </Tabs>
@@ -79,7 +97,7 @@ function getBreadcrumbs(project) {
       breadcrumbName: project.name,
     },
     {
-      breadcrumbName: "view",
+      breadcrumbName: "manage",
     },
   ];
 }

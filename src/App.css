@@ -2,12 +2,6 @@
 @import "~antd/dist/antd.dark.css";
 /* @import "~antd/dist/antd.compact.css"; */
 
-body {
-  width: 160ch;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .ant-layout-header,
 .ant-layout-footer {
   padding-left: 1em;
@@ -23,11 +17,6 @@ body {
   padding-left: 0;
   padding-right: 0;
 }
-/* .ant-btn-primary {
-    background-color: rgb(31, 78, 49);
-    color: silver;
-    border: 1px solid green;
-} */
 
 .color-picker-wrapper {
   border: 1px solid #434343; /* match antd */

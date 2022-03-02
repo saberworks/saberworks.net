@@ -29,17 +29,44 @@ class SaberworksApiClient {
 
   async updateProject(project) {}
 
+  async getPosts(projectId) {
+    return this.get(`/api/saberworks/projects/${projectId}/posts`);
+  }
+
+  async addPost(projectId, formData) {
+    const options = {
+      cache: "no-cache",
+      headers: {
+        "X-CSRFToken": this._csrftoken(),
+      },
+    };
+
+    return await this.post(
+      `/api/saberworks/projects/${projectId}/posts`,
+      formData,
+      options
+    );
+  }
+
+  async getScreenshots(projectId) {
+    return this.get(`/api/saberworks/projects/${projectId}/screenshots`);
+  }
+
   async get(path, options = {}) {
     return this.request("GET", path, options);
   }
 
   async post(path, body, options = {}) {
-    options["cache"] = "no-cache";
-    options["headers"] = {
-      "Content-Type": "application/json",
-      "X-CSRFToken": this._csrftoken(),
-    };
-    options["body"] = JSON.stringify(body);
+    if (Object.keys(options).length == 0) {
+      options["cache"] = "no-cache";
+      options["headers"] = {
+        "Content-Type": "application/json",
+        "X-CSRFToken": this._csrftoken(),
+      };
+      options["body"] = JSON.stringify(body);
+    } else {
+      options["body"] = body;
+    }
 
     return this.request("POST", path, options);
   }
@@ -75,7 +102,7 @@ class SaberworksApiClient {
   _csrftoken() {
     // django requires csrftoken to be in the request headers; yank it out
     // of the cookie and put it in the headers
-    // TODO: pull this into a util or switch to a non-cookie based auth
+    // TODO: switch to a non-cookie based auth???
     return document.cookie
       .split("; ")
       .find((row) => row.startsWith("csrftoken="))

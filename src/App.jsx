@@ -23,6 +23,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/projects/create" element={<ProjectCreate />} />
             <Route path="/projects/:projectId" element={<ProjectView />} />
+            <Route path="/projects/:projectId/:tab" element={<ProjectView />} />
             <Route path="/projects/:projectId/edit" element={<ProjectEdit />} />
             <Route
               path="/projects/:projectId/image"
