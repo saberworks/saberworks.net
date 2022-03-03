@@ -118,7 +118,7 @@ function getBreadcrumbs(project) {
   return [
     {
       path: "/",
-      breadcrumbName: "Dashboard",
+      breadcrumbName: "Home",
     },
     {
       path: "/projects",

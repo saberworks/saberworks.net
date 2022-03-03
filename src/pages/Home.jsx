@@ -1,26 +1,11 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import {
-  message,
-  Card,
-  List,
-  PageHeader,
-  Popconfirm,
-  Spin,
-  Tooltip,
-  Typography,
-} from "antd";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PictureOutlined,
-} from "@ant-design/icons";
+import { message, Card, List, PageHeader, Spin, Typography } from "antd";
 import { Link } from "react-router-dom";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-
-const { Paragraph } = Typography;
-
+import { EditLink } from "@/components/actions/EditLink";
+import { DeleteLink } from "@/components/actions/DeleteLink";
 import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
 
 export function Home() {
@@ -78,12 +63,11 @@ export function Home() {
 
       <PageHeader
         className="site-page-header"
-        title="Dashboard"
+        title="Your Projects"
         extra={<Link to="/projects/create">Create Project</Link>}
       />
 
       <List
-        header={<h3>All Your Projects</h3>}
         dataSource={projects}
         grid={{ gutter: 16, column: 3 }}
         split={false}
@@ -116,54 +100,40 @@ export function Home() {
                 whiteSpace: "pre-line",
               }}
               actions={[
-                <Tooltip title="Edit Project" key="tt0">
-                  <Link to={`/projects/${project.id}/edit`}>
-                    <EditOutlined key="edit" />
-                  </Link>
-                </Tooltip>,
-                <Tooltip title="Set Project Image" key="tt1">
-                  <Link to={`/projects/${project.id}/image`}>
-                    <PictureOutlined key="image" />
-                  </Link>
-                </Tooltip>,
-                <Tooltip title="Delete Project" key="tt2">
-                  <Popconfirm
-                    placement="top"
-                    title={
-                      <>
-                        <p>Are you sure you want to delete this project?</p>
-                        <p>
-                          Project Id: {project.id}
-                          <br />
-                          Project Name: {project.name}
-                        </p>
-                        <p>
-                          This action is{" "}
-                          <span style={{ color: "orangered" }}>permanent</span>{" "}
-                          and there is <em>no undo</em>.
-                        </p>
-                      </>
-                    }
-                    onConfirm={() => {
-                      deleteProject(project);
-                    }}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <DeleteOutlined
-                      key="delete"
-                      twoToneColor="red"
-                      style={{ color: "darkred" }}
-                    />
-                  </Popconfirm>
-                </Tooltip>,
+                <EditLink
+                  title="Edit Project"
+                  to={`/projects/${project.id}/edit`}
+                  key="edit"
+                />,
+                <DeleteLink
+                  title="Delete Project"
+                  key="delete"
+                  confirmPrompt={
+                    <>
+                      <p>Are you sure you want to delete this project?</p>
+                      <p>
+                        Project Id: {project.id}
+                        <br />
+                        Project Name: {project.name}
+                      </p>
+                      <p>
+                        This action is{" "}
+                        <span style={{ color: "orangered" }}>permanent</span>{" "}
+                        and there is <em>no undo</em>.
+                      </p>
+                    </>
+                  }
+                  onConfirm={() => {
+                    deleteProject(project);
+                  }}
+                />,
               ]}
             >
-              <Paragraph
+              <Typography.Paragraph
                 ellipsis={{ rows: 2, expandable: true, symbol: "more" }}
               >
                 {project.description}
-              </Paragraph>
+              </Typography.Paragraph>
             </Card>
           </List.Item>
         )}
@@ -175,7 +145,7 @@ export function Home() {
 function getBreadcrumbs() {
   return [
     {
-      breadcrumbName: "Dashboard",
+      breadcrumbName: "Home",
     },
   ];
 }

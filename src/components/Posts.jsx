@@ -7,14 +7,13 @@ import {
   Image,
   Input,
   message,
-  Popconfirm,
   Space,
   Table,
-  Tooltip,
   Typography,
 } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
+import { EditLink } from "@/components/actions/EditLink";
+import { DeleteLink } from "@/components/actions/DeleteLink";
 import { projectPropTypes } from "@/lib/PropTypes";
 import { dateFormat } from "@/lib/Util";
 import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
@@ -196,46 +195,38 @@ function getPostsTableColumns(projectId, deletePost) {
       title: "Action",
       dataIndex: "",
       key: "x",
-      render: (value, post, index) => {
+      render: (_value, post, _index) => {
         return (
           <>
             <Space size="middle">
-              <Tooltip title="Edit Post" key="tt0">
-                <Link to={`/projects/${projectId}/posts/${post.id}/edit`}>
-                  <EditOutlined key="edit" />
-                </Link>
-              </Tooltip>
-              <Tooltip title="Delete Post" key="tt2">
-                <Popconfirm
-                  placement="top"
-                  title={
-                    <>
-                      <p>Are you sure you want to delete this post?</p>
-                      <p>
-                        Post Id: {post.id}
-                        <br />
-                        Post Title: {post.title}
-                      </p>
-                      <p>
-                        This action is{" "}
-                        <span style={{ color: "orangered" }}>permanent</span>{" "}
-                        and there is <em>no undo</em>.
-                      </p>
-                    </>
-                  }
-                  onConfirm={() => {
-                    deletePost(post);
-                  }}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <DeleteOutlined
-                    key="delete"
-                    twoToneColor="red"
-                    style={{ color: "darkred" }}
-                  />
-                </Popconfirm>
-              </Tooltip>
+              <EditLink
+                title="Edit Post"
+                to={`/projects/${projectId}/posts/${post.id}/edit`}
+                key="edit"
+              />
+
+              <DeleteLink
+                title="Delete Post"
+                key="delete"
+                confirmPrompt={
+                  <>
+                    <p>Are you sure you want to delete this post?</p>
+                    <p>
+                      Post Id: {post.id}
+                      <br />
+                      Post Title: {post.title}
+                    </p>
+                    <p>
+                      This action is{" "}
+                      <span style={{ color: "orangered" }}>permanent</span> and
+                      there is <em>no undo</em>.
+                    </p>
+                  </>
+                }
+                onConfirm={() => {
+                  deletePost(post);
+                }}
+              />
             </Space>
           </>
         );
