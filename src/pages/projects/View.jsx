@@ -75,7 +75,7 @@ export function View() {
           <Screenshots project={project} />
         </TabPane>
         <TabPane tab="Files" key="files">
-          TODO: Implement list of files
+          OOF (not implemented yet) TODO: Implement files
         </TabPane>
       </Tabs>
     </>

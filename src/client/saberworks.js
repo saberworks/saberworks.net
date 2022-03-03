@@ -27,7 +27,10 @@ class SaberworksApiClient {
     return await this.delete(`/api/saberworks/projects/${projectId}`);
   }
 
-  async updateProject(project) {}
+  // TODO
+  async updateProject(project) {
+    console.log(project);
+  }
 
   async getPosts(projectId) {
     return this.get(`/api/saberworks/projects/${projectId}/posts`);
@@ -48,8 +51,20 @@ class SaberworksApiClient {
     );
   }
 
+  async deletePost(projectId, postId) {
+    return await this.delete(
+      `/api/saberworks/projects/${projectId}/posts/${postId}`
+    );
+  }
+
   async getScreenshots(projectId) {
     return this.get(`/api/saberworks/projects/${projectId}/screenshots`);
+  }
+
+  async deleteScreenshot(projectId, screenshotId) {
+    return await this.delete(
+      `/api/saberworks/projects/${projectId}/screenshots/${screenshotId}`
+    );
   }
 
   async get(path, options = {}) {

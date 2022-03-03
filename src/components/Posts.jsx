@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   Divider,
@@ -6,11 +7,16 @@ import {
   Image,
   Input,
   message,
+  Popconfirm,
+  Space,
   Table,
+  Tooltip,
   Typography,
 } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 import { projectPropTypes } from "@/lib/PropTypes";
+import { dateFormat } from "@/lib/Util";
 import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
 
 export function Posts({ project }) {
@@ -59,11 +65,32 @@ export function Posts({ project }) {
     message.success("The post was added successfully!");
   };
 
+  const deletePost = async (post) => {
+    const genericError =
+      "Error: Post could not be deleted.  This is not your fault.";
+
+    const deleteData = async () => {
+      const data = await client.deletePost(projectId, post.id);
+
+      if (data.success) {
+        message.success("Post was deleted successfully.", 10);
+        setPosts(posts.filter((p) => p.id !== post.id));
+      } else {
+        message.error(genericError, 10);
+      }
+    };
+
+    deleteData().catch((err) => {
+      console.log(err);
+      message.error(genericError, 10);
+    });
+  };
+
   return (
     <>
-      <Typography.Title level={4}>Add a Text Post</Typography.Title>
+      <Typography.Title level={4}>Add a Post</Typography.Title>
       <Typography.Paragraph>
-        Text posts require title and text. Image is optional.
+        Posts require title and text. Image is optional.
       </Typography.Paragraph>
       <Form
         layout="horizontal"
@@ -112,7 +139,7 @@ export function Posts({ project }) {
       <Table
         rowKey="id"
         dataSource={[...posts]}
-        columns={getPostsTableColumns()}
+        columns={getPostsTableColumns(projectId, deletePost)}
       />
     </>
   );
@@ -120,15 +147,32 @@ export function Posts({ project }) {
 
 Posts.propTypes = projectPropTypes;
 
-function getPostsTableColumns() {
+const renderNoWrap = (value) => {
+  return (
+    <Typography.Text style={{ whiteSpace: "nowrap" }}>{value}</Typography.Text>
+  );
+};
+
+function getPostsTableColumns(projectId, deletePost) {
   return [
+    {
+      title: "Created At",
+      dataIndex: "created_at",
+      className: "tdValignTop",
+      render: (created_at) => {
+        return renderNoWrap(dateFormat(created_at));
+      },
+    },
     {
       title: "Title",
       dataIndex: "title",
+      className: "tdValignTop",
+      render: (title) => renderNoWrap(title),
     },
     {
       title: "Text",
       dataIndex: "text",
+      className: "tdValignTop",
       render: (text) => {
         return (
           <Typography.Paragraph
@@ -143,8 +187,58 @@ function getPostsTableColumns() {
     {
       title: "Image",
       dataIndex: "image",
+      className: "tdValignTop",
       render: (image) => {
         return image ? <Image src={`${baseUrl}/${image}`} width="200px" /> : "";
+      },
+    },
+    {
+      title: "Action",
+      dataIndex: "",
+      key: "x",
+      render: (value, post, index) => {
+        return (
+          <>
+            <Space size="middle">
+              <Tooltip title="Edit Post" key="tt0">
+                <Link to={`/projects/${projectId}/posts/${post.id}/edit`}>
+                  <EditOutlined key="edit" />
+                </Link>
+              </Tooltip>
+              <Tooltip title="Delete Post" key="tt2">
+                <Popconfirm
+                  placement="top"
+                  title={
+                    <>
+                      <p>Are you sure you want to delete this post?</p>
+                      <p>
+                        Post Id: {post.id}
+                        <br />
+                        Post Title: {post.title}
+                      </p>
+                      <p>
+                        This action is{" "}
+                        <span style={{ color: "orangered" }}>permanent</span>{" "}
+                        and there is <em>no undo</em>.
+                      </p>
+                    </>
+                  }
+                  onConfirm={() => {
+                    deletePost(post);
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <DeleteOutlined
+                    key="delete"
+                    twoToneColor="red"
+                    style={{ color: "darkred" }}
+                  />
+                </Popconfirm>
+              </Tooltip>
+            </Space>
+          </>
+        );
       },
     },
   ];

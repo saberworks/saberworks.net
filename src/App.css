@@ -44,3 +44,7 @@
   height: 40px;
   border-radius: 0 0 0px 0px;
 }
+
+td.tdValignTop {
+  vertical-align: top;
+}
