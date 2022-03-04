@@ -20,12 +20,14 @@ export function TagSetCheckBoxGroup({ name, tagOptions, tags, setTags }) {
     groupedElements.push(
       <Card
         title={group}
+        size="small"
         style={{ marginBottom: "1em" }}
         bodyStyle={{ backgroundColor: "#000000" }}
         key={`card_${group}`}
       >
         <Checkbox.Group
           name={name}
+          defaultValue={tags[group]}
           options={tagsByGroup[group]}
           key={`tag_${group}`}
           onChange={(checkedValues) => saveSelections(group, checkedValues)}

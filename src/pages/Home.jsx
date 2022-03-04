@@ -64,7 +64,11 @@ export function Home() {
       <PageHeader
         className="site-page-header"
         title="Your Projects"
-        extra={<Link to="/projects/create">Create Project</Link>}
+        extra={
+          <Link to="/projects/create" className="ant-btn ant-btn-primary">
+            Create Project
+          </Link>
+        }
       />
 
       <List
@@ -90,10 +94,9 @@ export function Home() {
                   ")",
               }}
               bodyStyle={{
-                background:
-                  "linear-gradient(to right, black, transparent), url(" +
-                  `${baseUrl}/${project.image}` +
-                  ")",
+                backgroundImage: project.image
+                  ? `linear-gradient(to right, black, transparent), url(${baseUrl}/${project.image})`
+                  : "",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",

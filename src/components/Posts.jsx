@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   Divider,
@@ -56,9 +55,8 @@ export function Posts({ project }) {
     formData.append("payload", JSON.stringify(requestBody));
     formData.append("uploaded_image", selectedFile);
 
-    const data = await client.addPost(projectId, formData);
+    await client.addPost(projectId, formData);
 
-    const postId = data.post.id;
     form.resetFields();
     setShouldReloadPosts(true);
     message.success("The post was added successfully!");
@@ -195,7 +193,7 @@ function getPostsTableColumns(projectId, deletePost) {
       title: "Action",
       dataIndex: "",
       key: "x",
-      render: (_value, post, _index) => {
+      render: (_value, post) => {
         return (
           <>
             <Space size="middle">

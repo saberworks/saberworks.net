@@ -1,9 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import { Link } from "react-router-dom";
 import { Descriptions, Image } from "antd";
 
+import { byGameOrder } from "@/lib/Util";
+import { projectPropTypes } from "@/lib/PropTypes";
 import { Games } from "@/components/Games";
 import { Tags } from "@/components/Tags";
 import { baseUrl } from "@/client/saberworks";
@@ -16,18 +17,17 @@ export function Project({ project }) {
     </Link>
   );
 
-  const imagePath = `/projects/${project.id}/image`;
-  const imageLink = <Link to={imagePath}>Set New Image</Link>;
-
   const projectImage = project.image ? (
-    <Image
-      width={200}
-      src={`${baseUrl}/${project.image}`}
-      style={{ marginBottom: "1em" }}
-    />
+    <Image width={200} src={`${baseUrl}/${project.image}`} />
   ) : (
     <></>
   );
+
+  const wantedGames = project.games.map((game) => {
+    return { ...game, label: game.name };
+  });
+
+  const games = wantedGames.sort(byGameOrder);
 
   return (
     <Descriptions
@@ -46,16 +46,12 @@ export function Project({ project }) {
         #{project.accent_color}
       </Descriptions.Item>
       <Descriptions.Item label="Games">
-        <Games games={project.games} />
+        <Games games={games} />
       </Descriptions.Item>
       <Descriptions.Item label="Tags">
         <Tags tags={project.tags} />
       </Descriptions.Item>
-      <Descriptions.Item label="Image" contentStyle={{ fontWeight: "normal" }}>
-        {projectImage}
-        <br />
-        {imageLink}
-      </Descriptions.Item>
+      <Descriptions.Item label="Image">{projectImage}</Descriptions.Item>
       <Descriptions.Item
         label="Description"
         contentStyle={{ fontWeight: "normal" }}
@@ -66,14 +62,4 @@ export function Project({ project }) {
   );
 }
 
-Project.propTypes = {
-  project: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    description: PropTypes.string,
-    accent_color: PropTypes.string,
-    games: PropTypes.array,
-    tags: PropTypes.array,
-    image: PropTypes.string,
-  }).isRequired,
-};
+Project.propTypes = projectPropTypes;

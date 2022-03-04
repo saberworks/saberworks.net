@@ -27,6 +27,6 @@ export function DeleteLink({ title, confirmPrompt, onConfirm }) {
 
 DeleteLink.propTypes = {
   title: PropTypes.string.isRequired,
-  confirmPrompt: PropTypes.string.isRequired,
+  confirmPrompt: PropTypes.element.isRequired,
   onConfirm: PropTypes.func.isRequired,
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { message, PageHeader, Spin, Tabs } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
+import { PageHeader, Spin, Tabs } from "antd";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Project } from "@/components/Project";
@@ -16,8 +16,6 @@ export function View() {
   const params = useParams();
   const projectId = parseInt(params.projectId);
   const tab = params.tab;
-
-  const { state } = useLocation();
 
   const [project, setProject] = useState({});
   const [crumbs, setCrumbs] = useState([]);
@@ -35,15 +33,6 @@ export function View() {
   useEffect(() => {
     setCrumbs(getBreadcrumbs(project));
   }, [project]);
-
-  useEffect(() => {
-    if (state && state["justCreated"]) {
-      message.success(
-        "Project created!  You may want to set a project image.",
-        10
-      );
-    }
-  }, [state]);
 
   if (Object.keys(project).length === 0) {
     return <Spin />;

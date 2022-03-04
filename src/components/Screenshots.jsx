@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Divider, Image, message, Space, Table, Typography } from "antd";
+import { Divider, Image, message, Table, Typography } from "antd";
 
-import { EditLink } from "@/components/actions/EditLink";
 import { DeleteLink } from "@/components/actions/DeleteLink";
 import { projectPropTypes } from "@/lib/PropTypes";
 import { dateFormat } from "@/lib/Util";
@@ -109,36 +108,26 @@ function getScreenshotsTableColumns(projectId, deleteScreenshot) {
       title: "Action",
       dataIndex: "",
       key: "x",
-      render: (_value, screenshot, _index) => {
+      render: (_value, screenshot) => {
         return (
-          <>
-            <Space size="middle">
-              <EditLink
-                title="Edit Screenshot"
-                to={`/projects/${projectId}/screenshots/${screenshot.id}/edit`}
-                key="edit"
-              />
-
-              <DeleteLink
-                title="Delete Screenshot"
-                key="delete"
-                confirmPrompt={
-                  <>
-                    <p>Are you sure you want to delete this screenshot?</p>
-                    <p>Screenshot Id: {screenshot.id}</p>
-                    <p>
-                      This action is{" "}
-                      <span style={{ color: "orangered" }}>permanent</span> and
-                      there is <em>no undo</em>.
-                    </p>
-                  </>
-                }
-                onConfirm={() => {
-                  deleteScreenshot(screenshot);
-                }}
-              />
-            </Space>
-          </>
+          <DeleteLink
+            title="Delete Screenshot"
+            key="delete"
+            confirmPrompt={
+              <>
+                <p>Are you sure you want to delete this screenshot?</p>
+                <p>Screenshot Id: {screenshot.id}</p>
+                <p>
+                  This action is{" "}
+                  <span style={{ color: "orangered" }}>permanent</span> and
+                  there is <em>no undo</em>.
+                </p>
+              </>
+            }
+            onConfirm={() => {
+              deleteScreenshot(screenshot);
+            }}
+          />
         );
       },
     },

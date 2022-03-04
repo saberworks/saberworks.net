@@ -1,29 +1,51 @@
 import React from "react";
-
-import { Typography, PageHeader } from "antd";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Breadcrumbs } from "../../components/Breadcrumbs";
+import { PageHeader, Spin } from "antd";
 
-const { Text } = Typography;
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ProjectForm } from "@/components/forms/ProjectForm";
+import { saberworksApiClient as client } from "@/client/saberworks";
 
 export function Edit() {
-  let params = useParams();
+  const params = useParams();
+
+  const [project, setProject] = useState({});
+  const [crumbs, setCrumbs] = useState([]);
 
   const projectId = parseInt(params.projectId);
-  const crumbs = getBreadcrumbs(projectId);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await client.getProject(projectId);
+
+      setProject(data);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setCrumbs(getBreadcrumbs(project));
+  }, [project]);
+
+  if (!Object.keys(project).length) {
+    return <Spin></Spin>;
+  }
 
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
       <PageHeader className="site-page-header" title="Edit Project" />
-      <Text>Edit project! {projectId}</Text>
+      <ProjectForm
+        project={project}
+        successMessage="Project updated successfully!"
+      />
     </>
   );
 }
 
-function getBreadcrumbs(projectId) {
-  const idStr = projectId.toString();
-
+function getBreadcrumbs(project) {
   return [
     {
       path: "/",
@@ -34,8 +56,8 @@ function getBreadcrumbs(projectId) {
       breadcrumbName: "Projects",
     },
     {
-      path: `/projects/${idStr}`,
-      breadcrumbName: `Project ${idStr}`,
+      path: `/projects/${project.id}`,
+      breadcrumbName: project.name,
     },
     {
       breadcrumbName: "edit",
