@@ -93,6 +93,7 @@ function getScreenshotsTableColumns(projectId, deleteScreenshot) {
     {
       title: "Image",
       dataIndex: "image",
+      className: "tdValignTop",
       render: (image) => {
         return image ? <Image src={`${baseUrl}/${image}`} width="200px" /> : "";
       },
@@ -100,6 +101,7 @@ function getScreenshotsTableColumns(projectId, deleteScreenshot) {
     {
       title: "Created At",
       dataIndex: "created_at",
+      className: "tdValignTop",
       render: (created_at) => {
         return dateFormat(created_at);
       },
@@ -107,7 +109,9 @@ function getScreenshotsTableColumns(projectId, deleteScreenshot) {
     {
       title: "Action",
       dataIndex: "",
-      key: "x",
+      className: "tdValignTop",
+      align: "center",
+      key: "action",
       render: (_value, screenshot) => {
         return (
           <DeleteLink

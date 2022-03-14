@@ -2,6 +2,26 @@
 @import "~antd/dist/antd.dark.css";
 /* @import "~antd/dist/antd.compact.css"; */
 
+/* .ant-layout-header {
+  background: url(http://localhost/media/saberworks/project/37-brians-test-project/JediAcademy.jpg)
+    repeat-x;
+} */
+
+.ant-layout-header {
+  height: auto;
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+p.motto {
+  /* border: 1px solid green; */
+  color: #434343;
+  background-color: black;
+  margin: 0px;
+  padding: 0px;
+  display: block;
+}
+
 .ant-layout-header,
 .ant-layout-footer {
   padding-left: 1em;
@@ -16,6 +36,26 @@
 .ant-page-header {
   padding-left: 0;
   padding-right: 0;
+}
+
+.saberworks-logo {
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: white;
+
+  font-size: 7em;
+  font-weight: bold;
+  /* background: url(http://localhost//media/saberworks/project/78-brians-empty-test-project/images/Rodianguy.png); */
+  /* background: url(https://www.massassi.net/tutorials/perfect_polygons/16.gif); */
+  /* background: url(http://localhost//media/saberworks/project/72-7000-block/images/jed.gif); */
+  background: url(http://localhost//media/saberworks/project/95-aaaaffffffadsfasdf/images/jed_from_KnightCop.gif);
+  /* background: url(http://localhost//media/saberworks/project/79-8000-block/optimized_glitched_jed_by_KnightCop.webp); */
+  background-position: 50% 50%;
+  opacity: 0.8;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
 }
 
 .color-picker-wrapper {

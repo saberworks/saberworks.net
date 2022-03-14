@@ -75,10 +75,6 @@ function getBreadcrumbs(project) {
   return [
     {
       path: "/",
-      breadcrumbName: "Home",
-    },
-    {
-      path: "/projects",
       breadcrumbName: "Projects",
     },
     {

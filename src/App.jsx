@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Layout, Typography } from "antd";
+import { Layout } from "antd";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 const { Header, Footer, Content } = Layout;
 
@@ -10,14 +10,19 @@ import { Edit as ProjectEdit } from "@/pages/projects/Edit";
 import { View as ProjectView } from "@/pages/projects/View";
 import { Image as ProjectImage } from "@/pages/projects/Image";
 
+import { Edit as PostEdit } from "@/pages/posts/Edit";
+
 function App() {
   return (
     <Layout>
       <Header>
-        <Typography.Text strong>saberworks</Typography.Text>
-        <Typography.Text> - mod project pages for everyone</Typography.Text>
+        <div>
+          <h1 className="saberworks-logo">saberworks.net</h1>
+        </div>
       </Header>
       <Content>
+        <p className="motto">project pages for everyone</p>
+
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -28,6 +33,10 @@ function App() {
             <Route
               path="/projects/:projectId/image"
               element={<ProjectImage />}
+            />
+            <Route
+              path="/projects/:projectId/posts/:postId/edit"
+              element={<PostEdit />}
             />
 
             <Route

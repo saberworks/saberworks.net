@@ -94,20 +94,16 @@ export function ProjectForm({ project, successMessage }) {
       description: values.description,
     };
 
-    const formData = new FormData();
-
-    formData.append("payload", JSON.stringify(requestBody));
-
-    if (selectedFile != null) {
-      formData.append("image", selectedFile);
-    }
-
     let data;
 
     if (projectId) {
-      data = await client.updateProject(projectId, formData);
+      data = await client.updateProjectWithImage(
+        projectId,
+        requestBody,
+        selectedFile
+      );
     } else {
-      data = await client.addProject(formData);
+      data = await client.addProjectWithImage(requestBody, selectedFile);
     }
 
     const newProjectId = data.project.id;

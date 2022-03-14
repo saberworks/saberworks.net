@@ -11,34 +11,38 @@ class SaberworksApiClient {
     return await this.get("/api/saberworks/tags");
   }
 
+  /**
+   * Projects
+   */
+
   async getProjects() {
     return await this.get("/api/saberworks/projects");
   }
 
-  async addProject(formData) {
-    const options = {
-      cache: "no-cache",
-      headers: {
-        "X-CSRFToken": this._csrftoken(),
-      },
-    };
-
-    return await this.post(`/api/saberworks/projects`, formData, options);
+  async addProject(payload) {
+    return await this.post(`/api/saberworks/projects`, payload);
   }
 
-  async updateProject(projectId, formData) {
-    const options = {
-      cache: "no-cache",
-      headers: {
-        "X-CSRFToken": this._csrftoken(),
-      },
-    };
+  async addProjectWithImage(payload, image) {
+    const formData = new FormData();
 
-    return await this.post(
-      `/api/saberworks/projects/${projectId}`,
-      formData,
-      options
-    );
+    formData.append("payload", JSON.stringify(payload));
+    formData.append("image", image);
+
+    return await this.post(`/api/saberworks/projects.with_image`, formData);
+  }
+
+  async updateProjectWithImage(projectId, payload, image) {
+    const formData = new FormData();
+
+    formData.append("payload", JSON.stringify(payload));
+    formData.append("image", image);
+
+    return await this.post(`/api/saberworks/projects/${projectId}`, formData);
+  }
+
+  async updateProject(projectId, payload) {
+    return await this.put(`/api/saberworks/projects/${projectId}`, payload);
   }
 
   async getProject(projectId) {
@@ -49,22 +53,46 @@ class SaberworksApiClient {
     return await this.delete(`/api/saberworks/projects/${projectId}`);
   }
 
+  /**
+   * Posts
+   */
+
   async getPosts(projectId) {
     return this.get(`/api/saberworks/projects/${projectId}/posts`);
   }
 
-  async addPost(projectId, formData) {
-    const options = {
-      cache: "no-cache",
-      headers: {
-        "X-CSRFToken": this._csrftoken(),
-      },
-    };
+  async getPost(projectId, postId) {
+    return this.get(`/api/saberworks/projects/${projectId}/posts/${postId}`);
+  }
 
+  async addPost(projectId, payload) {
     return await this.post(
       `/api/saberworks/projects/${projectId}/posts`,
-      formData,
-      options
+      payload
+    );
+  }
+
+  async addPostWithImage(projectId, payload, image) {
+    const formData = new FormData();
+
+    formData.append("payload", JSON.stringify(payload));
+    formData.append("image", image);
+
+    return await this.post(
+      `/api/saberworks/projects/${projectId}/posts.with_image`,
+      formData
+    );
+  }
+
+  async updatePostWithImage(projectId, postId, payload, image) {
+    const formData = new FormData();
+
+    formData.append("payload", JSON.stringify(payload));
+    formData.append("image", image);
+
+    return await this.post(
+      `/api/saberworks/projects/${projectId}/posts/${postId}`,
+      formData
     );
   }
 
@@ -73,6 +101,10 @@ class SaberworksApiClient {
       `/api/saberworks/projects/${projectId}/posts/${postId}`
     );
   }
+
+  /**
+   * Screenshots
+   */
 
   async getScreenshots(projectId) {
     return this.get(`/api/saberworks/projects/${projectId}/screenshots`);
@@ -84,48 +116,41 @@ class SaberworksApiClient {
     );
   }
 
+  /**
+   * Files
+   */
+  async getFiles() {}
+
+  async addFile() {}
+
+  async updateFile() {}
+
+  async deleteFile() {}
+
+  /**
+   * Generic methods
+   */
+
   async get(path, options = {}) {
     return this.request("GET", path, options);
   }
 
   async post(path, body, options = {}) {
-    if (Object.keys(options).length == 0) {
-      options["cache"] = "no-cache";
-      options["headers"] = {
-        "Content-Type": "application/json",
-        "X-CSRFToken": this._csrftoken(),
-      };
-      options["body"] = JSON.stringify(body);
-    } else {
-      options["body"] = body;
-    }
+    const preparedOptions = this.prepareRequestOptions(body, options);
 
-    return this.request("POST", path, options);
+    return this.request("POST", path, preparedOptions);
   }
 
   async put(path, body, options = {}) {
-    if (Object.keys(options).length == 0) {
-      options["cache"] = "no-cache";
-      options["headers"] = {
-        "Content-Type": "application/json",
-        "X-CSRFToken": this._csrftoken(),
-      };
-      options["body"] = JSON.stringify(body);
-    } else {
-      options["body"] = body;
-    }
+    const preparedOptions = this.prepareRequestOptions(body, options);
 
-    return this.request("PUT", path, options);
+    return this.request("PUT", path, preparedOptions);
   }
 
   async delete(path, options = {}) {
-    options["cache"] = "no-cache";
-    options["headers"] = {
-      "Content-Type": "application/json",
-      "X-CSRFToken": this._csrftoken(),
-    };
+    const preparedOptions = this.prepareRequestOptions(null, options);
 
-    return this.request("DELETE", path, options);
+    return this.request("DELETE", path, preparedOptions);
   }
 
   async request(method, path, options = {}) {
@@ -144,6 +169,28 @@ class SaberworksApiClient {
     }
 
     return await response.json();
+  }
+
+  /**
+   * Utility methods
+   */
+
+  prepareRequestOptions(body, options = {}) {
+    options["headers"] = {
+      "X-CSRFToken": this._csrftoken(),
+    };
+
+    if (body instanceof FormData) {
+      options["body"] = body;
+    } else {
+      options["headers"]["Content-Type"] = "application/json";
+
+      if (body) {
+        options["body"] = JSON.stringify(body);
+      }
+    }
+
+    return options;
   }
 
   _csrftoken() {

@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Divider,
-  Form,
-  Image,
-  Input,
-  message,
-  Space,
-  Table,
-  Typography,
-} from "antd";
+import { Divider, Image, message, Space, Table, Typography } from "antd";
 
+import { PostForm } from "@/components/forms/PostForm";
 import { EditLink } from "@/components/actions/EditLink";
 import { DeleteLink } from "@/components/actions/DeleteLink";
 import { projectPropTypes } from "@/lib/PropTypes";
@@ -18,17 +9,12 @@ import { dateFormat } from "@/lib/Util";
 import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
 
 export function Posts({ project }) {
-  const [form] = Form.useForm();
   const projectId = project.id;
 
-  const [shouldReloadPosts, setShouldReloadPosts] = useState(true);
   const [posts, setPosts] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
 
   // Download list of posts
   useEffect(() => {
-    if (!shouldReloadPosts) return;
-
     const fetchData = async () => {
       let posts = [];
       try {
@@ -38,33 +24,17 @@ export function Posts({ project }) {
       }
 
       setPosts(posts);
-      setShouldReloadPosts(false);
     };
 
     fetchData();
-  }, [shouldReloadPosts]);
+  }, []);
 
-  const onFinish = async (values) => {
-    const requestBody = {
-      title: values.title,
-      text: values.text,
-    };
-
-    const formData = new FormData();
-
-    formData.append("payload", JSON.stringify(requestBody));
-    formData.append("uploaded_image", selectedFile);
-
-    await client.addPost(projectId, formData);
-
-    form.resetFields();
-    setShouldReloadPosts(true);
-    message.success("The post was added successfully!");
+  const onSuccess = async (newPost) => {
+    setPosts([newPost, ...posts]);
   };
 
   const deletePost = async (post) => {
-    const genericError =
-      "Error: Post could not be deleted.  This is not your fault.";
+    const genericError = "Error: Post could not be deleted. (Not your fault!)";
 
     const deleteData = async () => {
       const data = await client.deletePost(projectId, post.id);
@@ -86,50 +56,12 @@ export function Posts({ project }) {
   return (
     <>
       <Typography.Title level={4}>Add a Post</Typography.Title>
-      <Typography.Paragraph>
-        Posts require title and text. Image is optional.
-      </Typography.Paragraph>
-      <Form
-        layout="horizontal"
-        form={form}
-        onFinish={onFinish}
-        labelCol={{ span: 2 }}
-        wrapperCol={{ span: 10 }}
-      >
-        <Form.Item
-          name="title"
-          label="Title"
-          rules={[{ required: true, message: "Please enter a Title." }]}
-        >
-          <Input placeholder="Title" maxLength={256}></Input>
-        </Form.Item>
+      <PostForm
+        project={project}
+        successMessage="Post created successfully!"
+        onSuccess={onSuccess}
+      />
 
-        <Form.Item
-          name="text"
-          label="Text"
-          rules={[{ required: true, message: "Please enter some Text." }]}
-        >
-          <Input.TextArea
-            showCount
-            maxLength={8192}
-            style={{ height: "12em" }}
-          ></Input.TextArea>
-        </Form.Item>
-
-        <Form.Item name="image" label="Image">
-          <Input
-            type="file"
-            value={selectedFile}
-            onChange={(e) => setSelectedFile(e.target.files[0])}
-          />
-        </Form.Item>
-
-        <Form.Item name="submit" wrapperCol={{ offset: 2, span: 10 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
       <Divider />
 
       <Typography.Title level={4}>All Posts</Typography.Title>
@@ -156,9 +88,7 @@ function getPostsTableColumns(projectId, deletePost) {
       title: "Created At",
       dataIndex: "created_at",
       className: "tdValignTop",
-      render: (created_at) => {
-        return renderNoWrap(dateFormat(created_at));
-      },
+      render: (created_at) => renderNoWrap(dateFormat(created_at)),
     },
     {
       title: "Title",
@@ -192,7 +122,9 @@ function getPostsTableColumns(projectId, deletePost) {
     {
       title: "Action",
       dataIndex: "",
-      key: "x",
+      className: "tdValignTop",
+      align: "center",
+      key: "action",
       render: (_value, post) => {
         return (
           <>

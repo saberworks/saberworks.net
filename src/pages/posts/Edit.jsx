@@ -4,16 +4,18 @@ import { useParams } from "react-router-dom";
 import { PageHeader, Spin } from "antd";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ProjectForm } from "@/components/forms/ProjectForm";
+import { PostForm } from "@/components/forms/PostForm";
 import { saberworksApiClient as client } from "@/client/saberworks";
 
 export function Edit() {
   const params = useParams();
 
   const [project, setProject] = useState({});
+  const [post, setPost] = useState({});
   const [crumbs, setCrumbs] = useState([]);
 
   const projectId = parseInt(params.projectId);
+  const postId = parseInt(params.postId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +28,17 @@ export function Edit() {
   }, []);
 
   useEffect(() => {
-    setCrumbs(getBreadcrumbs(project));
+    const fetchData = async () => {
+      const data = await client.getPost(projectId, postId);
+
+      setPost(data);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setCrumbs(getBreadcrumbs(project, post));
   }, [project]);
 
   if (!Object.keys(project).length) {
@@ -36,10 +48,11 @@ export function Edit() {
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
-      <PageHeader className="site-page-header" title="Edit Project" />
-      <ProjectForm
+      <PageHeader className="site-page-header" title="Edit Post" />
+      <PostForm
         project={project}
-        successMessage="Project updated successfully!"
+        post={post}
+        successMessage="Post updated successfully!"
       />
     </>
   );
@@ -56,7 +69,11 @@ function getBreadcrumbs(project) {
       breadcrumbName: project.name,
     },
     {
-      breadcrumbName: "edit",
+      path: `/projects/${project.id}/posts`,
+      breadcrumbName: "Posts",
+    },
+    {
+      breadcrumbName: `edit`,
     },
   ];
 }

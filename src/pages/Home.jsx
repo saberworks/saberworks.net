@@ -59,7 +59,7 @@ export function Home() {
 
   return (
     <>
-      <Breadcrumbs crumbs={crumbs} />
+      {/* <Breadcrumbs crumbs={crumbs} /> */}
 
       <PageHeader
         className="site-page-header"
@@ -148,7 +148,7 @@ export function Home() {
 function getBreadcrumbs() {
   return [
     {
-      breadcrumbName: "Home",
+      breadcrumbName: "Projects",
     },
   ];
 }
