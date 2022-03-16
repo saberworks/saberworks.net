@@ -1,0 +1,23 @@
+{
+  "include": ["src/**/*"],
+  "exclude": ["./node_modules", "dist"],
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": ".",
+    "declaration": false,
+    "lib": ["es2018", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": false,
+    "target": "es2018",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

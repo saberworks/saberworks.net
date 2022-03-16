@@ -1,9 +1,21 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 import { Card, Checkbox } from "antd";
 
-export function TagSetCheckBoxGroup({ name, tagOptions, tags, setTags }) {
+import { groupTags } from "@/lib/Util";
+
+type Props = {
+  name: string;
+  tags: object;
+  setTags: (tags: object) => void;
+  tagOptions: Array<any>;
+};
+
+export function TagSetCheckBoxGroup({
+  name,
+  tagOptions,
+  tags,
+  setTags,
+}: Props) {
   if (tagOptions.length == 0) {
     return <></>;
   }
@@ -37,28 +49,4 @@ export function TagSetCheckBoxGroup({ name, tagOptions, tags, setTags }) {
   }
 
   return <>{groupedElements}</>;
-}
-
-TagSetCheckBoxGroup.propTypes = {
-  name: PropTypes.string.isRequired,
-  tags: PropTypes.object.isRequired, // currently selected tags
-  setTags: PropTypes.func.isRequired, // func to set tags
-  tagOptions: PropTypes.array.isRequired, // set of options to display as checkboxes
-};
-
-function groupTags(tagOptions) {
-  const tagsByGroup = {};
-
-  for (const tag of tagOptions) {
-    if (!(tag.type in tagsByGroup)) {
-      tagsByGroup[tag.type] = [];
-    }
-
-    tagsByGroup[tag.type].push({
-      label: tag.tag,
-      value: tag.id,
-    });
-  }
-
-  return tagsByGroup;
 }

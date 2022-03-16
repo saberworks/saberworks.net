@@ -85,10 +85,12 @@ const renderNoWrap = (value) => {
 function getPostsTableColumns(projectId, deletePost) {
   return [
     {
-      title: "Created At",
-      dataIndex: "created_at",
+      title: "Image",
+      dataIndex: "image",
       className: "tdValignTop",
-      render: (created_at) => renderNoWrap(dateFormat(created_at)),
+      render: (image) => {
+        return image ? <Image src={`${baseUrl}/${image}`} width="200px" /> : "";
+      },
     },
     {
       title: "Title",
@@ -112,12 +114,10 @@ function getPostsTableColumns(projectId, deletePost) {
       },
     },
     {
-      title: "Image",
-      dataIndex: "image",
+      title: "Created At",
+      dataIndex: "created_at",
       className: "tdValignTop",
-      render: (image) => {
-        return image ? <Image src={`${baseUrl}/${image}`} width="200px" /> : "";
-      },
+      render: (created_at) => renderNoWrap(dateFormat(created_at)),
     },
     {
       title: "Action",

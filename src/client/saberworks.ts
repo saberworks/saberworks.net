@@ -106,11 +106,11 @@ class SaberworksApiClient {
    * Screenshots
    */
 
-  async getScreenshots(projectId) {
+  async getScreenshots(projectId: number) {
     return this.get(`/api/saberworks/projects/${projectId}/screenshots`);
   }
 
-  async deleteScreenshot(projectId, screenshotId) {
+  async deleteScreenshot(projectId: number, screenshotId: number) {
     return await this.delete(
       `/api/saberworks/projects/${projectId}/screenshots/${screenshotId}`
     );
@@ -119,13 +119,64 @@ class SaberworksApiClient {
   /**
    * Files
    */
-  async getFiles() {}
 
-  async addFile() {}
+  async getFiles(projectId: number) {
+    return this.get(`/api/saberworks/projects/${projectId}/files`);
+  }
+
+  async stageFile(projectId: number) {
+    return await this.post(
+      `/api/saberworks/projects/${projectId}/files.stage`,
+      {}
+    );
+  }
+
+  async uploadFile(projectId: number, fileId: number, file: Blob) {}
+
+  async addFileWithImage(
+    projectId: number,
+    payload: {},
+    file: string | Blob,
+    image: string | Blob
+  ) {
+    const formData = new FormData();
+
+    formData.append("payload", JSON.stringify(payload));
+    formData.append("file", file);
+    formData.append("image", image);
+
+    return await this.post(
+      `/api/saberworks/projects/${projectId}/files`,
+      formData
+    );
+  }
 
   async updateFile() {}
 
-  async deleteFile() {}
+  async updateFileWithImage(
+    projectId: number,
+    fileId: number,
+    payload: {},
+    image: string | Blob
+  ) {
+    const formData = new FormData();
+
+    console.dir(payload);
+
+    formData.append("payload", JSON.stringify(payload));
+    formData.append("image", image);
+
+    return await this.post(
+      `/api/saberworks/projects/${projectId}/files/${fileId}`,
+      formData
+    );
+  }
+
+  async deleteFile(projectId, fileId) {
+    return await this.delete(
+      `/api/saberworks/projects/${projectId}/files/${fileId}`
+    );
+  }
 
   /**
    * Generic methods

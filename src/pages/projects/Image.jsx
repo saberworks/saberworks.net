@@ -85,9 +85,6 @@ export function Image() {
       return isValidImageType || Upload.LIST_IGNORE;
     },
     onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
       if (info.file.status === "done") {
         message.success(`Project image set successfully!`);
         navigate(`/projects/${projectId}`, { state: { imageAdded: true } });

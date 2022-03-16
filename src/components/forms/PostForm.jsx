@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input, message, Spin, Tooltip, Typography } from "antd";
+import { Button, Form, Input, message, Space, Spin, Tooltip } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 
@@ -38,6 +38,10 @@ export function PostForm({ project, post, successMessage, onSuccess }) {
     setImageLabel(imageLabel);
     setInitialValues(initialValues);
   }, [post]);
+
+  const handleCancel = async () => {
+    navigate(`/projects/${projectId}/posts`);
+  };
 
   const onFinish = async (values) => {
     const requestBody = {
@@ -82,53 +86,55 @@ export function PostForm({ project, post, successMessage, onSuccess }) {
   }
 
   return (
-    <>
-      <Typography.Paragraph>
-        Posts require title and text. Image is optional.
-      </Typography.Paragraph>
-      <Form
-        initialValues={initialValues}
-        layout="horizontal"
-        form={form}
-        onFinish={onFinish}
-        labelCol={{ span: 2 }}
-        wrapperCol={{ span: 10 }}
+    <Form
+      initialValues={initialValues}
+      layout="horizontal"
+      form={form}
+      onFinish={onFinish}
+      labelCol={{ span: 2 }}
+      wrapperCol={{ span: 10 }}
+    >
+      <Form.Item
+        name="title"
+        label="Title"
+        rules={[{ required: true, message: "Please enter a Title." }]}
       >
-        <Form.Item
-          name="title"
-          label="Title"
-          rules={[{ required: true, message: "Please enter a Title." }]}
-        >
-          <Input placeholder="Title" maxLength={256}></Input>
-        </Form.Item>
+        <Input placeholder="Title" maxLength={256}></Input>
+      </Form.Item>
 
-        <Form.Item
-          name="text"
-          label="Text"
-          rules={[{ required: true, message: "Please enter some Text." }]}
-        >
-          <Input.TextArea
-            showCount
-            maxLength={8192}
-            style={{ height: "12em" }}
-          ></Input.TextArea>
-        </Form.Item>
+      <Form.Item
+        name="text"
+        label="Text"
+        rules={[{ required: true, message: "Please enter some Text." }]}
+      >
+        <Input.TextArea
+          showCount
+          maxLength={8192}
+          style={{ height: "12em" }}
+        ></Input.TextArea>
+      </Form.Item>
 
-        <Form.Item name="image" label={imageLabel}>
-          <Input
-            type="file"
-            value={selectedFile}
-            onChange={(e) => setSelectedFile(e.target.files[0])}
-          />
-        </Form.Item>
+      <Form.Item name="image" label={imageLabel}>
+        <Input
+          type="file"
+          value={selectedFile}
+          onChange={(e) => setSelectedFile(e.target.files[0])}
+        />
+      </Form.Item>
 
-        <Form.Item name="submit" wrapperCol={{ offset: 2, span: 10 }}>
+      <Form.Item name="submit" wrapperCol={{ offset: 2, span: 10 }}>
+        <Space type="horizontal" size="large">
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
-        </Form.Item>
-      </Form>
-    </>
+          {postId && (
+            <Button type="link" onClick={handleCancel}>
+              Cancel
+            </Button>
+          )}
+        </Space>
+      </Form.Item>
+    </Form>
   );
 }
 

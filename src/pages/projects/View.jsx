@@ -6,6 +6,7 @@ import { PageHeader, Spin, Tabs } from "antd";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Project } from "@/components/Project";
 import { Posts } from "@/components/Posts";
+import { Files } from "@/components/Files";
 import { Screenshots } from "@/components/Screenshots";
 import { saberworksApiClient as client } from "@/client/saberworks";
 
@@ -64,7 +65,7 @@ export function View() {
           <Screenshots project={project} />
         </TabPane>
         <TabPane tab="Files" key="files">
-          OOF (not implemented yet) TODO: Implement files
+          <Files project={project} />
         </TabPane>
       </Tabs>
     </>

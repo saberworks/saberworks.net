@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Tag } from "antd";
 
+import { groupTags } from "@/lib/Util";
+
 const availableColors = [
   "volcano",
   "red",
@@ -30,12 +32,16 @@ export function Tags({ tags }) {
 
     for (const tag of groupedTags[tagType]) {
       jsxTags.push(
-        <Tag color={color} key={`tag_${tag.value}`}>
+        <Tag color={color} key={tag.key}>
           {tagType}:{tag.label}
         </Tag>
       );
     }
+
+    jsxTags.push(<br style={{ marginBottom: ".5em" }} key={tagType} />);
   }
+
+  jsxTags.pop(); // remove trailing <br>
 
   return <>{jsxTags}</>;
 }
@@ -43,22 +49,3 @@ export function Tags({ tags }) {
 Tags.propTypes = {
   tags: PropTypes.array.isRequired,
 };
-
-// TODO: this function is copied, find all the copies and find a singular
-// place to put it
-function groupTags(tagOptions) {
-  const tagsByGroup = {};
-
-  for (const tag of tagOptions) {
-    if (!(tag.type in tagsByGroup)) {
-      tagsByGroup[tag.type] = [];
-    }
-
-    tagsByGroup[tag.type].push({
-      label: tag.tag,
-      value: tag.id,
-    });
-  }
-
-  return tagsByGroup;
-}

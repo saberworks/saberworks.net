@@ -37,3 +37,21 @@ export function byGameOrder(a, b) {
 
   return aSort - bSort;
 }
+
+export function groupTags(tagOptions) {
+  const tagsByGroup = {};
+
+  for (const tag of tagOptions) {
+    if (!(tag.type in tagsByGroup)) {
+      tagsByGroup[tag.type] = [];
+    }
+
+    tagsByGroup[tag.type].push({
+      label: tag.tag,
+      value: tag.id,
+      key: `tag_${tag.type}_${tag.value}`,
+    });
+  }
+
+  return tagsByGroup;
+}

@@ -2,9 +2,13 @@ import React from "react";
 import { Tooltip, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
-import PropTypes from "prop-types";
+type Props = {
+  title: string;
+  confirmPrompt: string;
+  onConfirm: () => void;
+};
 
-export function DeleteLink({ title, confirmPrompt, onConfirm }) {
+export function DeleteLink({ title, confirmPrompt, onConfirm }: Props) {
   return (
     <>
       <Tooltip title={title} key="tt2">
@@ -24,9 +28,3 @@ export function DeleteLink({ title, confirmPrompt, onConfirm }) {
     </>
   );
 }
-
-DeleteLink.propTypes = {
-  title: PropTypes.string.isRequired,
-  confirmPrompt: PropTypes.element.isRequired,
-  onConfirm: PropTypes.func.isRequired,
-};

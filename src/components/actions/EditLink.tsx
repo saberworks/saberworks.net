@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import { Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
-import PropTypes from "prop-types";
+type Props = {
+  title: string;
+  to: string;
+};
 
-export function EditLink({ title, to }) {
+export function EditLink({ title, to }: Props) {
   return (
     <>
       <Tooltip title={title} key="tt0">
@@ -16,8 +19,3 @@ export function EditLink({ title, to }) {
     </>
   );
 }
-
-EditLink.propTypes = {
-  title: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
-};
