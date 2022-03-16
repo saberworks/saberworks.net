@@ -94,31 +94,6 @@ export function FileForm({
     return <Spin></Spin>;
   }
 
-  // TODO:
-  // need to be able to start the file upload and then work on filling the rest
-  // of the fields while it uploads.  This requires a "temp upload" endpoint
-  // that will return some type of upload ID.  Then once the upload is started
-  // the rest of the form fields become active.  Need to associate the upload ID
-  // with the File row (file will be blank I guess).  I wonder if it makes sense
-  // just to permanently store the file in "uploads" and just reference it with
-  // upload_id.  That way I don't have to worry about deleting orphan files rows
-  // or orphan files.  Well, I can have a cron that just deletes uploads over a
-  // week old that aren't associated with a `files` row.
-  //
-  // urgh, if I want to get an upload_id right away, it takes two requests...
-  // hmmmmm
-
-  /**
-   * 1) add an uploads/ endpoint that takes a file and a project_id
-   * 2) add an upload tag to this page
-   * 3) all other fields are disabled until the upload is started
-   * 4) once upload is started, other fields become active
-   * 5) when user hits submit, save the file row with the upload_id
-   * 6) if upload is not finished, notify the user NOT TO LEAVE THE PAGE until
-   *    the upload is finished
-   * 7) once everything is finished, set success message and redirect to files/
-   */
-
   return (
     <Form
       initialValues={initialValues}

@@ -161,8 +161,6 @@ class SaberworksApiClient {
   ) {
     const formData = new FormData();
 
-    console.dir(payload);
-
     formData.append("payload", JSON.stringify(payload));
     formData.append("image", image);
 
@@ -172,7 +170,7 @@ class SaberworksApiClient {
     );
   }
 
-  async deleteFile(projectId, fileId) {
+  async deleteFile(projectId: number, fileId: number) {
     return await this.delete(
       `/api/saberworks/projects/${projectId}/files/${fileId}`
     );
