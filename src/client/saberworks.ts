@@ -3,6 +3,16 @@ import config from "@/config/config.json";
 const { baseUrl } = config.saberworksApi;
 
 class SaberworksApiClient {
+  async isLoggedIn() {
+    try {
+      const data = await this.get("/api/saberworks/is_logged_in");
+
+      return data;
+    } catch {
+      return { is_logged_in: false, username: null };
+    }
+  }
+
   async getGames() {
     return await this.get("/api/saberworks/games");
   }

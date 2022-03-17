@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Layout } from "antd";
+import { Layout, Spin } from "antd";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 const { Header, Footer, Content } = Layout;
 
@@ -9,10 +9,44 @@ import { Create as ProjectCreate } from "@/pages/projects/Create";
 import { Edit as ProjectEdit } from "@/pages/projects/Edit";
 import { View as ProjectView } from "@/pages/projects/View";
 import { Image as ProjectImage } from "@/pages/projects/Image";
-
 import { Edit as PostEdit } from "@/pages/posts/Edit";
+import { LoginForm } from "@/components/forms/LoginForm";
+import { saberworksApiClient as client } from "@/client/saberworks";
+
+interface loggedInData {
+  is_logged_in: boolean;
+  username: string;
+}
 
 function App() {
+  const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState<loggedInData>();
+
+  useEffect(() => {
+    const getData = async () => {
+      const data: loggedInData = await client.isLoggedIn();
+
+      setIsLoggedIn(data);
+      setLoading(false);
+      setUsername(data.username);
+    };
+
+    getData();
+  }, []);
+
+  if (loading) {
+    return <Spin></Spin>;
+  }
+
+  // TODO: probably just redirect to a massassi login, which will redirect back
+  // (so don't spend any time making this form look good or actually work)
+  if (!isLoggedIn.is_logged_in) {
+    if (!window.location.href.endsWith("/login")) {
+      window.location.href = "/login";
+    }
+  }
+
   return (
     <Layout>
       <Header>
@@ -21,10 +55,20 @@ function App() {
         </div>
       </Header>
       <Content>
-        <p className="motto">project pages for everyone</p>
+        <p className="motto">
+          project pages for{" "}
+          {username ? (
+            <>
+              <s>everyone</s> {username}
+            </>
+          ) : (
+            "everyone"
+          )}
+        </p>
 
         <BrowserRouter>
           <Routes>
+            <Route path="/login" element={<LoginForm />} />
             <Route path="/" element={<Home />} />
             <Route path="/projects/create" element={<ProjectCreate />} />
             <Route path="/projects/:projectId" element={<ProjectView />} />
