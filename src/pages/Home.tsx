@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { message, Card, List, PageHeader, Spin, Typography } from "antd";
 import { Link } from "react-router-dom";
 
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { EditLink } from "@/components/actions/EditLink";
 import { DeleteLink } from "@/components/actions/DeleteLink";
 import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
@@ -12,17 +11,19 @@ export function Home() {
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
 
-  const crumbs = getBreadcrumbs();
-
   // Download list of projects
   useEffect(() => {
     setLoading(true);
 
     const fetchData = async () => {
-      const projects = await client.getProjects();
+      try {
+        const projects = await client.getProjects();
 
-      setProjects(projects);
-      setLoading(false);
+        setProjects(projects);
+        setLoading(false);
+      } catch {
+        setLoading(false);
+      }
     };
 
     fetchData();
@@ -59,8 +60,6 @@ export function Home() {
 
   return (
     <>
-      {/* <Breadcrumbs crumbs={crumbs} /> */}
-
       <PageHeader
         className="site-page-header"
         title="Your Projects"
@@ -143,12 +142,4 @@ export function Home() {
       />
     </>
   );
-}
-
-function getBreadcrumbs() {
-  return [
-    {
-      breadcrumbName: "Projects",
-    },
-  ];
 }

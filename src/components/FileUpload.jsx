@@ -29,6 +29,7 @@ export function FileUpload({
     "application/gzip",
     "application/x-7z-compressed",
     "application/vnd.rar",
+    "text/plain", // TODO REMOVE THIS
   ];
 
   const props = {

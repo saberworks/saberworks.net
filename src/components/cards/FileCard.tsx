@@ -5,7 +5,6 @@ import filesize from "filesize";
 import { dateFormat } from "@/lib/Util";
 import { EditLink } from "@/components/actions/EditLink";
 import { DeleteLink } from "@/components/actions/DeleteLink";
-import { baseUrl } from "@/client/saberworks";
 
 export function FileCard({ project, file, onDeleteConfirm }) {
   return (
@@ -47,7 +46,7 @@ export function FileCard({ project, file, onDeleteConfirm }) {
       ]}
     >
       <p>{file.description}</p>
-      Download: <a href={`${baseUrl}/${file.file}`}>{file.name}</a>
+      Download: <a href={file.file}>{file.name}</a>
       <br />
       Size: {filesize(file.file_size)}
       <br />
@@ -58,7 +57,7 @@ export function FileCard({ project, file, onDeleteConfirm }) {
       <br />
       {file.image ? (
         <Image
-          src={`${baseUrl}/${file.image}`}
+          src={file.image}
           width="200"
           style={{ border: `1px solid #${project.accent_color}` }}
         ></Image>

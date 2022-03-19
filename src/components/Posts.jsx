@@ -6,7 +6,7 @@ import { EditLink } from "@/components/actions/EditLink";
 import { DeleteLink } from "@/components/actions/DeleteLink";
 import { projectPropTypes } from "@/lib/PropTypes";
 import { dateFormat } from "@/lib/Util";
-import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
+import { saberworksApiClient as client } from "@/client/saberworks";
 
 export function Posts({ project }) {
   const projectId = project.id;
@@ -89,7 +89,7 @@ function getPostsTableColumns(projectId, deletePost) {
       dataIndex: "image",
       className: "tdValignTop",
       render: (image) => {
-        return image ? <Image src={`${baseUrl}/${image}`} width="200px" /> : "";
+        return image ? <Image src={image} width="200px" /> : "";
       },
     },
     {

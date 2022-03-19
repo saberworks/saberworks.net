@@ -1,10 +1,11 @@
 import React from "react";
+import type { ReactElement } from "react";
 import { Tooltip, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 type Props = {
   title: string;
-  confirmPrompt: string;
+  confirmPrompt: string | ReactElement;
   onConfirm: () => void;
 };
 

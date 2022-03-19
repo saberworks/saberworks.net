@@ -7,7 +7,6 @@ import { byGameOrder } from "@/lib/Util";
 import { projectPropTypes } from "@/lib/PropTypes";
 import { Games } from "@/components/Games";
 import { Tags } from "@/components/Tags";
-import { baseUrl } from "@/client/saberworks";
 
 export function Project({ project }) {
   const editPath = "/projects/" + project.id + "/edit";
@@ -18,7 +17,7 @@ export function Project({ project }) {
   );
 
   const projectImage = project.image ? (
-    <Image width={200} src={`${baseUrl}/${project.image}`} />
+    <Image width={200} src={project.image} />
   ) : (
     <></>
   );

@@ -95,7 +95,7 @@ function getScreenshotsTableColumns(projectId, deleteScreenshot) {
       dataIndex: "image",
       className: "tdValignTop",
       render: (image) => {
-        return image ? <Image src={`${baseUrl}/${image}`} width="200px" /> : "";
+        return image ? <Image src={image} width="200px" /> : "";
       },
     },
     {
