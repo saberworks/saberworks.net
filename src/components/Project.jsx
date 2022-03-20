@@ -3,7 +3,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Descriptions, Image } from "antd";
 
-import { byGameOrder } from "@/lib/Util";
 import { projectPropTypes } from "@/lib/PropTypes";
 import { Games } from "@/components/Games";
 import { Tags } from "@/components/Tags";
@@ -22,12 +21,6 @@ export function Project({ project }) {
     <></>
   );
 
-  const wantedGames = project.games.map((game) => {
-    return { ...game, label: game.name };
-  });
-
-  const games = wantedGames.sort(byGameOrder);
-
   return (
     <Descriptions
       title="Project Details"
@@ -36,6 +29,7 @@ export function Project({ project }) {
       column={1}
       contentStyle={{ whiteSpace: "pre-line", fontWeight: "bold" }}
       extra={editLink}
+      size="small"
     >
       <Descriptions.Item label="Name">{project.name}</Descriptions.Item>
       <Descriptions.Item
@@ -45,7 +39,7 @@ export function Project({ project }) {
         #{project.accent_color}
       </Descriptions.Item>
       <Descriptions.Item label="Games">
-        <Games games={games} />
+        <Games games={project.games} />
       </Descriptions.Item>
       <Descriptions.Item label="Tags">
         <Tags tags={project.tags} />

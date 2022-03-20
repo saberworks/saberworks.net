@@ -1,11 +1,21 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { message, Card, List, PageHeader, Spin, Typography } from "antd";
+import {
+  message,
+  Card,
+  List,
+  PageHeader,
+  Spin,
+  Typography,
+  Descriptions,
+} from "antd";
 import { Link } from "react-router-dom";
 
-import { EditLink } from "@/components/actions/EditLink";
 import { DeleteLink } from "@/components/actions/DeleteLink";
-import { baseUrl, saberworksApiClient as client } from "@/client/saberworks";
+import { EditLink } from "@/components/actions/EditLink";
+import { Games } from "@/components/Games";
+import { saberworksApiClient as client } from "@/client/saberworks";
+import { Tags } from "@/components/Tags";
 
 export function Home() {
   const [loading, setLoading] = useState(true);
@@ -94,7 +104,7 @@ export function Home() {
               }}
               bodyStyle={{
                 backgroundImage: project.image
-                  ? `linear-gradient(to right, black, transparent), url(${baseUrl}/${project.image})`
+                  ? `linear-gradient(to right, black, transparent), url(${project.image})`
                   : "",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -132,10 +142,35 @@ export function Home() {
               ]}
             >
               <Typography.Paragraph
+                style={{
+                  padding: "1em",
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                }}
                 ellipsis={{ rows: 2, expandable: true, symbol: "more" }}
               >
                 {project.description}
               </Typography.Paragraph>
+              <Descriptions
+                size="small"
+                bordered
+                labelStyle={{
+                  fontWeight: "",
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                }}
+                column={1}
+                contentStyle={{
+                  whiteSpace: "pre-line",
+                  fontWeight: "bold",
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <Descriptions.Item label="Games">
+                  <Games games={project.games} />
+                </Descriptions.Item>
+                <Descriptions.Item label="Tags">
+                  <Tags tags={project.tags} />
+                </Descriptions.Item>
+              </Descriptions>
             </Card>
           </List.Item>
         )}
