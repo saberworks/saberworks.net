@@ -111,7 +111,7 @@ export function FileUpload({
   return (
     <>
       <Typography.Paragraph>{instructions}</Typography.Paragraph>
-      <div style={{ width: "95%", marginLeft: "auto", marginRight: "auto" }}>
+      <div style={{ width: "50%" }}>
         <Upload {...props}>{fileList.length > 0 ? null : uploadButton}</Upload>
       </div>
     </>
